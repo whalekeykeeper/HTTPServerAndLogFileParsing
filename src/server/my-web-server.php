@@ -19,6 +19,11 @@ $port = $argv[2];
 $logDir = __DIR__ . '/../../logs/';
 $logFile = $logDir . 'server.log';
 
+$current_timezone = date_default_timezone_get();
+if ($current_timezone !== 'CET') {
+    date_default_timezone_set('CET');
+}
+
 if (!is_dir($logDir)) {
     mkdir($logDir, 0777, true);
 }
@@ -56,6 +61,8 @@ while (true) {
     }
 
     socket_getpeername($client, $clientIp);
+
+
 
     $logEntry = date('Y-m-d H:i:s') . " - IP: $clientIp - Request: " . trim($request) . "\n";
     file_put_contents($logFile, $logEntry, FILE_APPEND);
