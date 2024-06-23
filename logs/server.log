@@ -1,0 +1,12 @@
+2024-06-23 22:45:48 - IP: 127.0.0.1 - Request: GET / HTTP/1.1
+Host: 127.0.0.1:8080
+User-Agent: curl/7.84.0
+Accept: */*
+2024-06-23 22:45:48 - IP: 127.0.0.1 - Request: POST /path1 HTTP/1.1
+Host: 127.0.0.1:8080
+User-Agent: curl/7.84.0
+Accept: */*
+2024-06-23 22:45:48 - IP: 127.0.0.1 - Request: PUT /path2 HTTP/1.1
+Host: 127.0.0.1:8080
+User-Agent: curl/7.84.0
+Accept: */*
