@@ -88,7 +88,11 @@ function handle_client_request($client, $logFile)
         return;
     }
 
+    $clientIp = '';
     socket_getpeername($client, $clientIp);
+    if ($clientIp === null) {
+        $clientIp = 'unknown';
+    }
 
     $logEntry = date('Y-m-d H:i:s') . " - IP: $clientIp - Request: " . trim($request) . "\n";
     file_put_contents($logFile, $logEntry, FILE_APPEND);
