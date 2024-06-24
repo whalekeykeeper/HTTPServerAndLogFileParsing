@@ -9,7 +9,7 @@ By doing so, we can simulate a load test on the server and get a log file for fu
 """
 
 
-def send_requests(host, port, total_duration_minutes=3, requests_per_minute=20):
+def send_requests(host, port, total_duration_minutes=3, requests_per_minute=5):
     url_base = f"http://{host}:{port}"
     endpoints = ["/", "/path1", "/path2"]
     methods = ["GET", "POST", "PUT"]

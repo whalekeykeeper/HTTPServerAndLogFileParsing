@@ -47,9 +47,8 @@ class MyWebServerTest extends TestCase
         $request = "GET / HTTP/1.1\r\nHost: localhost\r\nConnection: close\r\n\r\n";
         $this->sendHttpRequest($request);
 
-        usleep(100000); // 100ms delay
+        usleep(100000);
 
-        // Read the log file content
         $logContent = file_get_contents($this->logFile);
         $logEntries = explode("\n", trim($logContent));
 
@@ -67,7 +66,7 @@ class MyWebServerTest extends TestCase
             $this->assertArrayHasKey('timestamp', $decodedLogEntry);
             $this->assertArrayHasKey('client_ip', $decodedLogEntry);
             $this->assertArrayHasKey('request', $decodedLogEntry);
-
+            $this->assertArrayHasKey('response', $decodedLogEntry);
         }
     }
 }
