@@ -14,7 +14,7 @@ from src.traffic_analyser import (
     filter_entries_by_time,
     calculate_request_stats,
     calculate_http_status_rate,
-    print_statistics,
+    print_statistics, detect_anomalies,
 )
 
 
@@ -113,6 +113,16 @@ class TestWebServerTrafficAnalyzer(unittest.TestCase):
         self.assertIn(f"Maximum RPM: {max_rpm:.2f}", printed_output)
         self.assertIn(f"Average RPM: {avg_rpm:.2f}", printed_output)
         self.assertIn(f"95 percentile: {percentile_95th:.2f}", printed_output)
+
+    def test_detect_anomalies(self):
+        # Assuming we expect one anomaly.
+        start_time = datetime.strptime("2024-06-24 04:30:00", "%Y-%m-%d %H:%M:%S")
+        end_time = datetime.strptime("2024-06-24 05:30:00", "%Y-%m-%d %H:%M:%S")
+        filtered_entries = filter_entries_by_time(
+            self.mock_log_entries, start_time, end_time
+        )
+        anomaly_timestamps = detect_anomalies(filtered_entries)
+        print("Anomaly Timestamps:", anomaly_timestamps)
 
 
 if __name__ == "__main__":

@@ -2,6 +2,7 @@ import json
 import argparse
 from datetime import datetime, timedelta
 import numpy as np
+from sklearn.ensemble import IsolationForest
 
 
 def parse_args():
@@ -91,6 +92,33 @@ def print_statistics(start_time, end_time, max_rpm, avg_rpm, percentile_95th):
     print(f"95 percentile: {percentile_95th:.2f}")
 
 
+def detect_anomalies(entries):
+    if not entries:
+        return []
+
+    timestamps = [
+        datetime.strptime(entry["timestamp"], "%Y-%m-%d %H:%M:%S") for entry in entries
+    ]
+    if len(timestamps) <= 1:
+        return []
+
+    intervals = [
+        (timestamps[i + 1] - timestamps[i]).total_seconds()
+        for i in range(len(timestamps) - 1)
+    ]
+    intervals = np.array(intervals).reshape(-1, 1)
+
+    isolation_forest = IsolationForest(contamination=0.1)
+    isolation_forest.fit(intervals)
+    anomalies = isolation_forest.predict(intervals)
+
+    anomaly_timestamps = [
+        timestamps[i + 1] for i, anomaly in enumerate(anomalies) if anomaly == -1
+    ]
+
+    return anomaly_timestamps
+
+
 def main():
     args = parse_args()
 
@@ -113,8 +141,14 @@ def main():
 
         status_rate_per_minute = calculate_http_status_rate(filtered_entries)
         print("HTTP Status Code Rate per minute:", status_rate_per_minute)
-        # for minute_key, status_counts in sorted(status_rate_per_minute.items()):
-        #     print(f"{minute_key}: {status_counts}")
+
+        anomaly_timestamps = detect_anomalies(filtered_entries)
+        if anomaly_timestamps:
+            print("Anomalies detected at the following timestamps:")
+            for timestamp in anomaly_timestamps:
+                print(timestamp)
+        else:
+            print("No anomalies detected.")
 
     except Exception as e:
         print(f"Error: {e}")
