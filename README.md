@@ -9,7 +9,7 @@ The task description will be attached at the end of ReadMe.
 php src/my-web-server.php  127.0.0.1 8080
 ```
 
-#### Send a request to the server using curl:
+#### Send requests to the server using curl:
 ```BASH
 curl -X GET http://127.0.0.1:8080/path2
 curl -X GET http://127.0.0.1:8080/
@@ -17,7 +17,7 @@ curl -X GET http://127.0.0.1:8080/path1
 curl -X POST http://127.0.0.1:8080/
 ```
 
-#### Send a request to the server using python script:
+#### Send requests to the server using python script:
 `
 python src/request.py
 `
