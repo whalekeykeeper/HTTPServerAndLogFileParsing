@@ -8,14 +8,15 @@
  */
 
 // Check if there are exactly 3 arguments (script name, host, port)
-if ($argc !== 3) {
-    echo "Usage: php " . $argv[0] . " <host> <port>\n";
-    echo "Example: php " . $argv[0] . " 127.0.0.1 8080\n";
+if (isset($argv) && count($argv) === 3) {
+    $host = $argv[1];
+    $port = $argv[2];
+} else {
+    echo "Usage: php " . ($argv[0] ?? 'my-web-server.php') . " <host> <port>\n";
+    echo "Example: php " . ($argv[0] ?? 'my-web-server.php') . " 127.0.0.1 8080\n";
     exit(1);
 }
 
-$host = $argv[1];
-$port = $argv[2];
 $logDir = __DIR__ . '/../../logs/';
 $logFile = $logDir . 'server.log';
 
