@@ -31,6 +31,7 @@ python src/traffic_analyser.py --from "2024-06-24 00:00:00" --to "2024-06-24 06:
 There are tests for both my-web-server.php and traffic_analyser.py.
 The commands to run them in terminal will be updated in the future.
 For now, you can run the tests by clicking on the run button in the test file.
+(Hint: the MyWebServerTest.php requires the server to be running.)
 
 ### To be developed in the future:
 1. More robust way to handle the request and response.
