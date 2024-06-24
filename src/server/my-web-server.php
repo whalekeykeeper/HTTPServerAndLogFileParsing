@@ -28,41 +28,66 @@ if (!is_dir($logDir)) {
     mkdir($logDir, 0777, true);
 }
 
-$socket = socket_create(AF_INET, SOCK_STREAM, SOL_TCP);
-if ($socket === false) {
-    echo "Socket creation failed: " . socket_strerror(socket_last_error()) . "\n";
+$socket = initialize_socket($host, $port);
+if (!$socket) {
     exit(1);
 }
 
-if (socket_bind($socket, $host, $port) === false) {
-    echo "Socket bind failed: " . socket_strerror(socket_last_error($socket)) . "\n";
-    exit(1);
-}
+start_server($socket, $logFile);
 
-if (socket_listen($socket, 5) === false) {
-    echo "Socket listen failed: " . socket_strerror(socket_last_error($socket)) . "\n";
-    exit(1);
-}
-
-echo "Server listening on $host:$port...\n";
-
-while (true) {
-    $client = socket_accept($socket);
-    if ($client === false) {
-        echo "Socket accept failed: " . socket_strerror(socket_last_error($socket)) . "\n";
-        continue;
+function initialize_socket($host, $port)
+{
+    $socket = socket_create(AF_INET, SOCK_STREAM, SOL_TCP);
+    if ($socket === false) {
+        echo "Socket creation failed: " . socket_strerror(socket_last_error()) . "\n";
+        return false;
     }
 
+    if (socket_bind($socket, $host, $port) === false) {
+        echo "Socket bind failed: " . socket_strerror(socket_last_error($socket)) . "\n";
+        socket_close($socket);
+        return false;
+    }
+
+    if (socket_listen($socket, 5) === false) {
+        echo "Socket listen failed: " . socket_strerror(socket_last_error($socket)) . "\n";
+        socket_close($socket);
+        return false;
+    }
+
+    echo "Server listening on $host:$port...\n";
+    return $socket;
+}
+
+/**
+ * Main server loop to accept and handle client connections.
+ */
+function start_server($socket, $logFile)
+{
+    while (true) {
+        $client = socket_accept($socket);
+        if ($client === false) {
+            echo "Socket accept failed: " . socket_strerror(socket_last_error($socket)) . "\n";
+            continue;
+        }
+
+        handle_client_request($client, $logFile);
+        socket_close($client);
+    }
+}
+
+/**
+ * Handle incoming client request: read, log, and respond.
+ */
+function handle_client_request($client, $logFile)
+{
     $request = socket_read($client, 1024);
     if ($request === false) {
         echo "Socket read failed: " . socket_strerror(socket_last_error($client)) . "\n";
-        socket_close($client);
-        continue;
+        return;
     }
 
     socket_getpeername($client, $clientIp);
-
-
 
     $logEntry = date('Y-m-d H:i:s') . " - IP: $clientIp - Request: " . trim($request) . "\n";
     file_put_contents($logFile, $logEntry, FILE_APPEND);
@@ -71,12 +96,8 @@ while (true) {
         "Content-Type: text/plain\r\n" .
         "Content-Length: 13\r\n" .
         "\r\n" .
-        "Successfully connected;".date('Y-m-d H:i:s')."\r\n";
-
+        "Successfully connected; " . date('Y-m-d H:i:s') . "\r\n";
 
     socket_write($client, $response, strlen($response));
-
-    socket_close($client);
 }
-
 ?>
