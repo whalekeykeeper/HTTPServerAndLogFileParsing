@@ -94,7 +94,12 @@ function handle_client_request($client, $logFile)
         $clientIp = 'unknown';
     }
 
-    $logEntry = date('Y-m-d H:i:s') . " - IP: $clientIp - Request: " . trim($request) . "\n";
+    $logEntry = json_encode([
+            'timestamp' => date('Y-m-d H:i:s'),
+            'client_ip' => $clientIp,
+            'request' => trim($request)
+        ]) . "\n";
+
     file_put_contents($logFile, $logEntry, FILE_APPEND);
 
     $response = "HTTP/1.1 200 OK\r\n" .
@@ -105,4 +110,3 @@ function handle_client_request($client, $logFile)
 
     socket_write($client, $response, strlen($response));
 }
-?>
