@@ -17,7 +17,7 @@ if (isset($argv) && count($argv) === 3) {
     exit(1);
 }
 
-$logDir = __DIR__ . '/../../logs/';
+$logDir = __DIR__ . '/../logs/';
 $logFile = $logDir . 'server.log';
 
 $current_timezone = date_default_timezone_get();
@@ -78,7 +78,7 @@ function start_server($socket, $logFile)
 }
 
 /**
- * Handle incoming client request: read, log, and respond.
+ * Handle incoming client request: read, respond, and log
  */
 function handle_client_request($client, $logFile)
 {
@@ -94,19 +94,20 @@ function handle_client_request($client, $logFile)
         $clientIp = 'unknown';
     }
 
-    $logEntry = json_encode([
-            'timestamp' => date('Y-m-d H:i:s'),
-            'client_ip' => $clientIp,
-            'request' => trim($request)
-        ]) . "\n";
-
-    file_put_contents($logFile, $logEntry, FILE_APPEND);
-
     $response = "HTTP/1.1 200 OK\r\n" .
         "Content-Type: text/plain\r\n" .
         "Content-Length: 13\r\n" .
         "\r\n" .
         "Successfully connected; " . date('Y-m-d H:i:s') . "\r\n";
+
+    $logEntry = json_encode([
+            'timestamp' => date('Y-m-d H:i:s'),
+            'client_ip' => $clientIp,
+            'request' => trim($request),
+            'response' => trim($response)
+        ]) . "\n";
+
+    file_put_contents($logFile, $logEntry, FILE_APPEND);
 
     socket_write($client, $response, strlen($response));
 }
