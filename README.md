@@ -9,7 +9,8 @@ PHP installed on your system (version 7.x recommended).
 PHPUnit installed for running tests (optional for development).
 
 ## Dependency Management with Poetry for Python scripts
-This project uses Poetry for managing Python dependencies. Poetry is a tool that simplifies dependency management by providing consistent and reliable package installations.
+This project uses Poetry for managing Python dependencies.
+Poetry is a tool that simplifies dependency management by providing consistent and reliable package installations.
 
 ### Install Poetry
 ```BASH
@@ -108,6 +109,7 @@ Anomalies detected at the following timestamps:
 4. Draw graphs for the statistics.
 5. Use pipeline to run the tests automatically.
 6. Think about if necessary to use virtual environment for python scripts.
+7. Create docker image for the server and the analyser (to do soon).
 
 
 ## Task Description:
