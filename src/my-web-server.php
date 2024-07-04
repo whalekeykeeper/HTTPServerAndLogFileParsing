@@ -7,18 +7,21 @@
  * Default port: 8080
  */
 
-// Check if there are exactly 3 arguments (script name, host, port)
-if (isset($argv) && count($argv) === 3) {
+// Check if there are 3 or 4 arguments (script name, host, port, and optionally log_file_location)
+if (isset($argv) && (count($argv) === 3 || count($argv) === 4)) {
     $host = $argv[1];
     $port = $argv[2];
+    $logFile = $argv[3] ?? __DIR__ . '/../logs/server.log';
 } else {
-    echo "Usage: php " . ($argv[0] ?? 'my-web-server.php') . " <host> <port>\n";
-    echo "Example: php " . ($argv[0] ?? 'my-web-server.php') . " 127.0.0.1 8080\n";
+    echo "Usage: php " . ($argv[0] ?? 'my-web-server.php') . " <host> <port> [<log_file_location>]\n";
+    echo "Example: php " . ($argv[0] ?? 'my-web-server.php') . " 127.0.0.1 8080 logs/server.log\n";
     exit(1);
 }
 
-$logDir = __DIR__ . '/../logs/';
-$logFile = $logDir . 'server.log';
+$logDir = dirname($logFile);
+if (!is_dir($logDir)) {
+    mkdir($logDir, 0777, true);
+}
 
 $current_timezone = date_default_timezone_get();
 if ($current_timezone !== 'CET') {
