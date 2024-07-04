@@ -39,11 +39,24 @@ def send_requests(host, port, total_duration_minutes=3, requests_per_minute=5):
                 f"Request to {url} with {method} - Status Code: {response.status_code}"
             )
 
+            response.raise_for_status()
+
         except requests.exceptions.RequestException as e:
             print(f"Request to {url} with {method} failed: {e}")
 
-        requests_sent += 1
+        except requests.exceptions.HTTPError as e:
+            print(f"HTTP error occurred: {e.response.status_code}")
 
+        except requests.exceptions.ConnectionError as e:
+            print(f"Connection error occurred: {e}")
+
+        except requests.exceptions.Timeout as e:
+            print(f"Timeout error occurred: {e}")
+
+        except Exception as e:
+            print(f"Other error occurred: {e}")
+
+        requests_sent += 1
         time.sleep(random.uniform(0.5, 2.0))
 
     print("Finished sending requests.")
