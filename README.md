@@ -4,44 +4,9 @@ The task description will be attached at the end of ReadMe.
 
 ## Getting started:
 ### Prerequisites
-PHP installed on your system (version 7.x recommended).
+PHP installed on your system (version 7.x recommended). 
 
 PHPUnit installed for running tests (optional for development).
-
-## Usage
-### Start the Server
-```PHP
-php src/my-web-server.php  127.0.0.1 8080
-```
-or 
-```PHP
-php src/my-web-server.php  127.0.0.1 8080 logs/server.log
-```
-
-### Send sample requests to the server using curl for generating log records:
-```BASH
-curl -X GET http://127.0.0.1:8080/path2
-curl -X GET http://127.0.0.1:8080/
-curl -X GET http://127.0.0.1:8080/path1
-curl -X POST http://127.0.0.1:8080/
-```
-
-### Send sample requests to the server using python script for generating log records:
-```BASH
-python src/request.py
-```
-
-### Run the traffic analyser:
-```BASH
-python src/traffic_analyser.py --from "2024-07-03 19:00:00" --to "2024-07-04 01:00:00"
-```
-
-## Tests
-To run the tests, you need to have PHPUnit installed on your system. You can install PHPUnit using Composer or download the PHAR file from the official website.
-```BASH
-phpunit tests/MyWebServerTest.php
-```
-(The tests for the traffic analyser are not finished yet.)
 
 ## Dependency Management with Poetry for Python scripts
 This project uses Poetry for managing Python dependencies. Poetry is a tool that simplifies dependency management by providing consistent and reliable package installations.
@@ -60,7 +25,7 @@ This command reads the pyproject.toml file and installs all necessary dependenci
 To run a Python script using Poetry, use the following command:
 
 ```bash
-poetry run python script.py
+poetry run python python/src/traffic_analyser.py
 ```
 This command ensures that the script runs within the Poetry environment, using the correct dependencies.
 
@@ -70,12 +35,69 @@ To update all dependencies to their latest compatible versions, run:
 poetry update
 ```
 
+## Usage
+### Start the Server
+```PHP
+php php/src/my-web-server.php  127.0.0.1 8080
+```
+or
+```PHP
+php php/src/my-web-server.php  127.0.0.1 8080 logs/server.log
+```
+
+### Send sample requests to the server using curl for generating log records:
+```BASH
+curl -X GET http://127.0.0.1:8080/path2
+curl -X GET http://127.0.0.1:8080/
+curl -X GET http://127.0.0.1:8080/path1
+curl -X POST http://127.0.0.1:8080/
+```
+
+### Send sample requests to the server using python script for generating log records:
+```BASH
+poetry run python src/request.py
+```
+
+### Run the traffic analyser:
+```BASH
+poetry run  python python/src/traffic_analyser.py --from "2024-07-03 19:00:00" --to "2024-07-04 01:00:00"
+```
+
+## Tests
+To run the tests, you need to have PHPUnit installed on your system. You can install PHPUnit using Composer or download the PHAR file from the official website.
+```BASH
+phpunit tests/MyWebServerTest.php
+```
+(The tests for the traffic analyser are not finished yet.)
+
 ## Others
 
 ### Python file formatting:
 To format the python files, use the following command:
 ```bash
 poetry run black .
+```
+
+### Example output of the traffic analyser:
+```bash
+Analyzing traffic from 2024-07-03 18:05:43.967541 to 2024-07-04 04:05:43.967559
+Statistics from 2024-07-03 18:05:43.967541 to 2024-07-04 04:05:43.967559
+Maximum RPM: 3600.00
+Average RPM: 0.21
+95 percentile: 22.64
+HTTP Status Code Rate per minute: 0.2066205441628145
+Anomalies detected at the following timestamps:
+2024-07-03 19:19:33
+2024-07-03 21:13:53
+2024-07-03 21:36:32
+2024-07-03 21:50:52
+2024-07-03 22:42:25
+2024-07-03 23:11:03
+2024-07-03 23:35:45
+2024-07-04 00:13:06
+2024-07-04 00:23:42
+2024-07-04 02:56:34
+2024-07-04 03:59:26
 ```
 
 
