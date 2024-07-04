@@ -28,10 +28,6 @@ if ($current_timezone !== 'CET') {
     date_default_timezone_set('CET');
 }
 
-if (!is_dir($logDir)) {
-    mkdir($logDir, 0777, true);
-}
-
 $socket = initialize_socket($host, $port);
 if (!$socket) {
     exit(1);
@@ -85,32 +81,34 @@ function start_server($socket, $logFile)
  */
 function handle_client_request($client, $logFile)
 {
-    $request = socket_read($client, 1024);
-    if ($request === false) {
-        echo "Socket read failed: " . socket_strerror(socket_last_error($client)) . "\n";
-        return;
+    $request = '';
+    while ($buffer = socket_read($client, 1024)) {
+        $request .= $buffer;
+        if (strpos($request, "\r\n\r\n") !== false) {
+            break;
+        }
     }
 
-    $clientIp = '';
-    socket_getpeername($client, $clientIp);
-    if ($clientIp === null) {
-        $clientIp = 'unknown';
+    socket_getpeername($client, $clientAddress);
+    $clientIp = $clientAddress ?? 'UNKNOWN';
+
+    $response = "HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\n\r\nSuccessfully connected!";
+    socket_write($client, $response);
+
+    $httpCode = '';
+    if (preg_match('/HTTP\/\d\.\d\s+(\d{3})/', $response, $matches)) {
+        $httpCode = $matches[1];
     }
 
-    $response = "HTTP/1.1 200 OK\r\n" .
-        "Content-Type: text/plain\r\n" .
-        "Content-Length: 13\r\n" .
-        "\r\n" .
-        "Successfully connected; " . date('Y-m-d H:i:s') . "\r\n";
+    $logEntry = [
+        'timestamp' => date('Y-m-d H:i:s'),
+        'client_ip' => $clientIp,
+        'HTTP_code' => $httpCode
+    ];
 
-    $logEntry = json_encode([
-            'timestamp' => date('Y-m-d H:i:s'),
-            'client_ip' => $clientIp,
-            'request' => trim($request),
-            'response' => trim($response)
-        ]) . "\n";
+    $logEntryJson = json_encode($logEntry) . PHP_EOL;
 
-    file_put_contents($logFile, $logEntry, FILE_APPEND);
+    echo "Log entry: $logEntryJson\n";
 
-    socket_write($client, $response, strlen($response));
+    file_put_contents($logFile, $logEntryJson, FILE_APPEND);
 }
