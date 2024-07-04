@@ -16,10 +16,10 @@ class LogEntry:
 
 class LogAnalyzer:
     def __init__(
-            self,
-            log_file_path: str,
-            start_time: Optional[datetime],
-            end_time: Optional[datetime],
+        self,
+        log_file_path: str,
+        start_time: Optional[datetime],
+        end_time: Optional[datetime],
     ):
         if not os.path.exists(log_file_path):
             raise FileNotFoundError(f"File not found at {log_file_path}")
@@ -91,7 +91,7 @@ class LogAnalyzer:
 
         max_rpm = 60 / shortest_interval
         avg_rpm = len(entries) / (
-                (timestamps[-1] - timestamps[0]).total_seconds() / 60.0
+            (timestamps[-1] - timestamps[0]).total_seconds() / 60.0
         )
         percentile_95th = np.percentile(intervals, 95)
         self.max_rpm = max_rpm
