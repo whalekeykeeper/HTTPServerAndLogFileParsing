@@ -3,13 +3,13 @@ This is a repository to implement a basic HTTP server in PHP using sockets to ha
 The task description will be attached at the end of ReadMe.
 
 ## Getting started:
-
 ### Prerequisites
-PHP installed on your system (version 7.x recommended)
-PHPUnit installed for running tests (optional for development)
+PHP installed on your system (version 7.x recommended).
+
+PHPUnit installed for running tests (optional for development).
 
 ## Usage
-### Starting the Server
+### Start the Server
 ```PHP
 php src/my-web-server.php  127.0.0.1 8080
 ```
@@ -27,19 +27,57 @@ curl -X POST http://127.0.0.1:8080/
 ```
 
 ### Send sample requests to the server using python script for generating log records:
-`
+```BASH
 python src/request.py
-`
+```
 
 ### Run the traffic analyser:
-`
+```BASH
 python src/traffic_analyser.py --from "2024-07-03 19:00:00" --to "2024-07-04 01:00:00"
-`
+```
 
 ## Tests
-`
+To run the tests, you need to have PHPUnit installed on your system. You can install PHPUnit using Composer or download the PHAR file from the official website.
+```BASH
 phpunit tests/MyWebServerTest.php
-`
+```
+(The tests for the traffic analyser are not finished yet.)
+
+## Dependency Management with Poetry for Python scripts
+This project uses Poetry for managing Python dependencies. Poetry is a tool that simplifies dependency management by providing consistent and reliable package installations.
+
+### Install Poetry
+```BASH
+pip install poetry
+```
+Once Poetry is installed, navigate to the project directory and install dependencies using:
+```BASH
+poetry install
+```
+This command reads the pyproject.toml file and installs all necessary dependencies for the project.
+
+### Usage
+To run a Python script using Poetry, use the following command:
+
+```bash
+poetry run python script.py
+```
+This command ensures that the script runs within the Poetry environment, using the correct dependencies.
+
+### Updating Dependencies
+To update all dependencies to their latest compatible versions, run:
+```bash
+poetry update
+```
+
+## Others
+
+### Python file formatting:
+To format the python files, use the following command:
+```bash
+poetry run black .
+```
+
 
 ### To be developed in the future:
 1. More robust way to handle the request and response.
@@ -47,6 +85,7 @@ phpunit tests/MyWebServerTest.php
 3. Use postgresSQL to store the logs with UUIDs.
 4. Draw graphs for the statistics.
 5. Use pipeline to run the tests automatically.
+6. Think about if necessary to use virtual environment for python scripts.
 
 
 ## Task Description:
