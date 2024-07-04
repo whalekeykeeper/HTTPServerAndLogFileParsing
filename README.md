@@ -66,7 +66,7 @@ poetry run  python python/src/traffic_analyser.py --from "2024-07-03 19:00:00" -
 ## Tests
 To run the tests, you need to have PHPUnit installed on your system. You can install PHPUnit using Composer or download the PHAR file from the official website.
 ```BASH
-phpunit tests/MyWebServerTest.php
+phpunit php/tests/MyWebServerTest.php
 ```
 (The tests for the traffic analyser are not finished yet.)
 
