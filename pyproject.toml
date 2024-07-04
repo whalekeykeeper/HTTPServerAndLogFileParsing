@@ -1,0 +1,16 @@
+[tool.poetry]
+name = "httpserverandlogfileparsing"
+version = "0.1.0"
+description = "This is a project for code challenge of Check24"
+authors = ["Qin Gu <guqin7@gmail.com>"]
+license = "GNU GPLv3"
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+requests = "^2.32.3"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
