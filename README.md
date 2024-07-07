@@ -37,6 +37,12 @@ To update all dependencies to their latest compatible versions, run:
 poetry update
 ```
 
+### Generate a requirements.txt file
+To generate a requirements.txt file from the pyproject.toml file, run:
+```bash
+poetry export --without-hashes --format=requirements.txt > requirements.txt
+```
+
 ## Usage
 ### Start the Server
 ```PHP
