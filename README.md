@@ -13,12 +13,13 @@ This project uses Poetry for managing Python dependencies.
 Poetry is a tool that simplifies dependency management by providing consistent and reliable package installations.
 
 ### Install Poetry
+Install pipx if you haven't already. Other methods see [here](https://python-poetry.org/docs/#installation).
 ```BASH
-pip install poetry
+pipx install poetry
 ```
-Once Poetry is installed, navigate to the project directory and install dependencies using:
+Once Poetry is installed, navigate to the project directory and run the following command to ‘initialise’ a pre-populated directory:
 ```BASH
-poetry install
+poetry init 
 ```
 This command reads the pyproject.toml file and installs all necessary dependencies for the project.
 
